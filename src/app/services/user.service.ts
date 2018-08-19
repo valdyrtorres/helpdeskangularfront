@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { HELP_DESK_API } from './helpdesk.api';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
 
   constructor(private http: HttpClient) { }
@@ -16,8 +18,8 @@ export class UserService {
     if(user.id != null && user.id != '') {
       return this.http.put(`${HELP_DESK_API}/api/user`, user);
     } else {
-      user.id = null;
-      return this.http.post(`${HELP_DESK_API}/api/user`, user);
+          user.id = null;
+          return this.http.post(`${HELP_DESK_API}/api/user`, user);
     }
   }
 
