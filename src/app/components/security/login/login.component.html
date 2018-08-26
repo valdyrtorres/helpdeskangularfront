@@ -4,7 +4,7 @@
         <h3 class="box-title">Help Desk | Login</h3>
     </div>
 
-    <form class="form-horizontal" #form="ngForm" (ngSubmit)="login()">
+    <form class="form-horizontal" #form="ngForm" (ngSubmit)="login()" novalidate>
         <div class="alert alert-error" role="alert" *ngIf="message">
             <strong>Invalid email or password</strong>
         </div>
@@ -38,7 +38,7 @@
                         #password="ngModel"
                         placeholder="Password"
                         required>
-                    <span class="help-block" *ngIf="password.invalid && password.dirty">Password is requied</span>
+                    <span class="help-block" *ngIf="password.invalid && password.dirty">Password is required</span>
                 </div>
             </div>
         </div>
