@@ -23,11 +23,11 @@ export class UserService {
     }
   }
 
-  findAll(page:number, count:number) {
+  findAll(page: number, count: number) {
     return this.http.get(`${HELP_DESK_API}/api/user/${page}/${count}`);
   }
 
-  findById(id:string) {
+  findById(id: string) {
     return this.http.get(`${HELP_DESK_API}/api/user/${id}`);
   }
 
