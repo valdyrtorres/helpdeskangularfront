@@ -60,8 +60,8 @@ export class TicketListComponent implements OnInit {
       this.showMessage({
         type: 'error',
         text: err['error']['errors'][0]
-      })
-    })
+      });
+    });
   }
 
   cleanFilter(): void {
@@ -138,6 +138,5 @@ export class TicketListComponent implements OnInit {
     };
     this.classCss['alert-' + type] = true;
   }
-
 
 }
