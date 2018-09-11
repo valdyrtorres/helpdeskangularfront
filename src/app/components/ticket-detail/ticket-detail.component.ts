@@ -1,9 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
 import { TicketService } from './../../services/ticket.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Ticket } from '../../model/ticket.model';
 import { SharedService } from '../../services/shared.service';
 import { ResponseApi } from '../../model/response-api';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -11,6 +12,9 @@ import { ResponseApi } from '../../model/response-api';
   styleUrls: ['./ticket-detail.component.css']
 })
 export class TicketDetailComponent implements OnInit {
+
+  @ViewChild("form")
+  form: NgForm
 
   ticket = new Ticket('',0,'','','','',null,null,'',null);
   shared: SharedService;
@@ -59,6 +63,32 @@ export class TicketDetailComponent implements OnInit {
     });
   }
 
+  register(){
+    this.message = {};
+    this.ticketService.createOrUpdate(this.ticket).subscribe((responseApi:ResponseApi) => {
+        this.ticket = new Ticket('',0,'','','','',null,null,'',null);
+        let ticket : Ticket = responseApi.data;
+        this.form.resetForm();
+        this.showMessage({
+          type: 'success',
+          text: `Registered ${ticket.title} successfully`
+        });
+    } , err => {
+      this.showMessage({
+        type: 'error',
+        text: err['error']['errors'][0]
+      });
+    });
+  }
+
+  getFormGroupClass(isInvalid: boolean, isDirty:boolean): {} {
+    return {
+      'form-group': true,
+      'has-error' : isInvalid  && isDirty,
+      'has-success' : !isInvalid  && isDirty
+    };
+  }
+
   private showMessage(message: {type: string, text: string}): void {
     this.message = message;
     this.buildClasses(message.type);
@@ -72,6 +102,22 @@ export class TicketDetailComponent implements OnInit {
      'alert': true
     };
     this.classCss['alert-' + type] = true;
+  }
+
+  onFileChange(event): void{
+    if(event.target.files[0].size > 2000000){
+      this.showMessage({
+        type: 'error',
+        text: 'Maximum image size is 2 MB'
+      });
+    } else {
+      this.ticket.image = '';
+      var reader = new FileReader();
+      reader.onloadend = (e: Event) => {
+          this.ticket.image = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
   }
 
 }
